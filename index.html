@@ -111,6 +111,10 @@
     if (group === "words" || group === "words3") {
       quizData = quizData.concat(data);
     } else {
+      quizData = quizData.concat(data.map(kana => ({ kana, romaji: toRomaji(kana) })));
+    }
+  });
+} else {
       quizData = quizData.concat(data.map(kana => ({ kana: kana, romaji: toRomaji(kana) })));
     }
   });
@@ -127,23 +131,18 @@ function setQuestion() {
         return;
       }
       currentQuestion = quizData[Math.floor(Math.random() * quizData.length)];
-      const displayKana = typeof currentQuestion === "string" ? currentQuestion : currentQuestion.kana;
+      const displayKana = currentQuestion.kana;
       document.getElementById("question").textContent = displayKana;
       document.getElementById("question").style.fontSize = "";
 
-      let romaji;
-      if (typeof currentQuestion === "string") {
-        romaji = toRomaji(currentQuestion);
-      } else {
-        romaji = currentQuestion.romaji;
-      }
+      let romaji = currentQuestion.romaji;
 
       const choices = shuffle([romaji, ...generateWrongChoices(romaji)]).slice(0, 4);
       document.getElementById("choices").innerHTML = choices.map(choice => `<button class="choice" onclick="checkAnswer('${choice}')">${choice}</button>`).join("");
     }
 
     function checkAnswer(selected) {
-  const correct = typeof currentQuestion === "string" ? toRomaji(currentQuestion) : currentQuestion.romaji;
+  const correct = currentQuestion.romaji;
   const resultText = selected === correct ? "Đúng!" : "Sai...";
 
   const resultDisplay = document.createElement("div");
