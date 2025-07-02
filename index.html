@@ -105,7 +105,7 @@
         return;
       }
       currentQuestion = quizData[Math.floor(Math.random() * quizData.length)];
-      const displayKana = currentQuestion.kana;
+      const displayKana = typeof currentQuestion === "string" ? currentQuestion : currentQuestion.kana;
       document.getElementById("question").textContent = displayKana;
       document.getElementById("question").style.fontSize = "";
 
