@@ -190,7 +190,7 @@
   }
   return result;
 };
-      return hiragana.split("").map(char => map[char] || "").join("");
+      
     }
 
     function shuffle(array) {
@@ -203,13 +203,20 @@
 
     window.onload = () => {
   const filters = document.getElementById("filters");
+  const groupLabels = {
+    a: "あ行", ka: "か行", sa: "さ行", ta: "た行", na: "な行",
+    ha: "は行", ma: "ま行", ya: "や行", ra: "ら行", wa: "わ行",
+    dakuon: "だくおん", youon: "ようおん", words: "2文字単語", words3: "3文字単語"
+  };
   for (const group in fullQuizData) {
     const isChecked = group === "a" ? "checked" : "";
+    const labelName = groupLabels[group] || group;
     const label = document.createElement("label");
-    const groupLabels = {
-  a: "あ行", ka: "か行", sa: "さ行", ta: "た行", na: "な行",
-  ha: "は行", ma: "ま行", ya: "や行", ra: "ら行", wa: "わ行",
-  dakuon: "だくおん", youon: "ようおん", words: "2文字単語", words3: "3文字単語"
+    label.innerHTML = `<input type="checkbox" name="group" value="${group}" ${isChecked}> ${labelName}`;
+    filters.appendChild(label);
+  }
+  document.getElementById("quizApp").style.display = "block";
+  setQuestion();
 };
 const labelName = groupLabels[group] || group;
 label.innerHTML = `<input type="checkbox" name="group" value="${group}" ${isChecked}> ${labelName}`;
@@ -217,9 +224,7 @@ label.innerHTML = `<input type="checkbox" name="group" value="${group}" ${isChec
   }
 };
 
-     else {
-        document.getElementById("loginMessage").textContent = "パスワードが違います。";
-      }
+     
     }
   </script>
 </body>
