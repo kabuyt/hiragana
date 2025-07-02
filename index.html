@@ -114,9 +114,7 @@
       quizData = quizData.concat(data.map(kana => ({ kana, romaji: toRomaji(kana) })));
     }
   });
-} else {
-      quizData = quizData.concat(data.map(kana => ({ kana: kana, romaji: toRomaji(kana) })));
-    }
+
   });
 }
 
@@ -134,10 +132,7 @@ function setQuestion() {
       const displayKana = currentQuestion.kana;
       document.getElementById("question").textContent = displayKana;
 
-      // 読み上げ機能
-      const utterance = new SpeechSynthesisUtterance(displayKana);
-      utterance.lang = "ja-JP";
-      speechSynthesis.speak(utterance);
+      // 読み上げ機能は checkAnswer に移動しました
       document.getElementById("question").style.fontSize = "";
 
       let romaji = currentQuestion.romaji;
@@ -155,6 +150,10 @@ function setQuestion() {
   resultDisplay.style.fontSize = "24px";
   resultDisplay.style.marginTop = "10px";
   document.getElementById("choices").appendChild(resultDisplay);
+
+  const utterance = new SpeechSynthesisUtterance(currentQuestion.kana);
+  utterance.lang = "ja-JP";
+  speechSynthesis.speak(utterance);
 
   setTimeout(() => {
     resultDisplay.remove();
