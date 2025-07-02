@@ -121,13 +121,19 @@
     }
 
     function checkAnswer(selected) {
-      const correct = typeof currentQuestion === "string" ? toRomaji(currentQuestion) : currentQuestion.romaji;
-      if (selected === correct) {
-        alert("Đúng!");
-      } else {
-        alert("Sai...");
-      }
-      setQuestion();
+  const correct = typeof currentQuestion === "string" ? toRomaji(currentQuestion) : currentQuestion.romaji;
+  const resultText = selected === correct ? "Đúng!" : "Sai...";
+
+  const resultDisplay = document.createElement("div");
+  resultDisplay.textContent = resultText;
+  resultDisplay.style.fontSize = "24px";
+  resultDisplay.style.marginTop = "10px";
+  document.getElementById("choices").appendChild(resultDisplay);
+
+  setTimeout(() => {
+    resultDisplay.remove();
+    setQuestion();
+  }, 1000);
     }
 
     function generateWrongChoices(correct) {
