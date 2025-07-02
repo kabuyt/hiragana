@@ -45,6 +45,7 @@
   <div id="filters"></div>
   <p style="font-size: 16px; margin-bottom: 20px; text-align: center;">出題範囲を選んでください（Vui lòng chọn phạm vi câu hỏi）</p>
   <div id="question"></div>
+  <div id="result" style="text-align: center; font-size: 24px; margin-bottom: 20px;"></div>
   <div class="choices"></div>
 
   
@@ -143,7 +144,9 @@
       resultDisplay.style.textAlign = "center";
       resultDisplay.style.fontSize = "24px";
       resultDisplay.style.marginTop = "10px";
-      document.body.appendChild(resultDisplay);
+      const resultContainer = document.getElementById("result");
+      resultContainer.innerHTML = "";
+      resultContainer.appendChild(resultDisplay);
 
       const utterance = new SpeechSynthesisUtterance(currentQuestion.kana);
       utterance.lang = "ja-JP";
