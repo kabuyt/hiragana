@@ -260,10 +260,12 @@
   quizData = [];
   const groups = getSelectedGroups();
 
-  if (groups.includes("words") && groups.length === 1) {
-    quizData = fullQuizData["words"];
-    return;
-  }
+  groups.forEach(group => {
+    if (fullQuizData[group]) {
+      quizData = quizData.concat(fullQuizData[group]);
+    }
+  });
+}
   if (groups.includes("words3") && groups.length === 1) {
     quizData = fullQuizData["words3"];
     return;
