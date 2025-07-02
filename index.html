@@ -9,95 +9,61 @@
       font-family: sans-serif;
       text-align: center;
       padding: 20px;
-      margin: 0;
     }
     #question {
       font-size: 96px;
-      margin-bottom: 20px;
-    }
-    .choices {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 10px;
-      margin-bottom: 20px;
+      margin: 30px 0;
     }
     .choice {
+      font-size: 32px;
       padding: 10px 20px;
-      font-size: 24px;
-      cursor: pointer;
-      border: 2px solid #444;
-      border-radius: 8px;
-      min-width: 80px;
-    }
-    .correct {
-      background-color: #c8f7c5;
-    }
-    .incorrect {
-      background-color: #f7c5c5;
-    }
-    #result {
-      font-size: 24px;
-      height: 30px;
-      margin-bottom: 20px;
+      margin: 10px;
     }
     #filters {
       margin-bottom: 20px;
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 10px;
-    }
-    #filters label {
-      font-size: 16px;
-    }
-
-    @media (max-width: 600px) {
-      #question {
-        font-size: 15vw;
-      }
-      .choice {
-        font-size: 6vw;
-        min-width: 30vw;
-      }
-      #result {
-        font-size: 6vw;
-      }
-      #filters label {
-        font-size: 4vw;
-      }
     }
   </style>
 </head>
 <body>
-  <h1>ひらがなクイズ</h1>
+  <div id="login" style="text-align:center;">
+    <p>パスワードを入力してください：</p>
+    <input type="password" id="passwordInput">
+    <button onclick="checkPassword()">OK</button>
+    <p id="loginMessage" style="color: red;"></p>
+  </div>
 
-<div id="filters">
-  <label><input type="checkbox" value="a"> あ行</label>
-  <label><input type="checkbox" value="ka"> か行</label>
-  <label><input type="checkbox" value="sa"> さ行</label>
-  <label><input type="checkbox" value="ta"> た行</label>
-  <label><input type="checkbox" value="na"> な行</label>
-  <label><input type="checkbox" value="ha"> は行</label>
-  <label><input type="checkbox" value="ma"> ま行</label>
-  <label><input type="checkbox" value="ya"> や行</label>
-  <label><input type="checkbox" value="ra"> ら行</label>
-  <label><input type="checkbox" value="wa"> わ行</label>
-  <label><input type="checkbox" value="dakuon"> 濁音</label>
-  <label><input type="checkbox" value="youon"> 拗音</label>
-  <label><input type="checkbox" value="words"> 二文字単語</label>
-  <label><input type="checkbox" value="words3"> 三文字単語</label>
-</div>
+  <div id="quizApp" style="display: none;">
+    <div id="filters"></div>
+    <div id="question"></div>
+    <div id="choices"></div>
+  </div>
 
-
-
-<div id="question"></div>
-  <div class="choices" id="choices"></div>
-  <div id="result"></div>
-
-  <!-- JavaScript unchanged -->
   <script>
     const fullQuizData = {
+      a: ["あ", "い", "う", "え", "お"],
+      ka: ["か", "き", "く", "け", "こ"],
+      sa: ["さ", "し", "す", "せ", "そ"],
+      ta: ["た", "ち", "つ", "て", "と"],
+      na: ["な", "に", "ぬ", "ね", "の"],
+      ha: ["は", "ひ", "ふ", "へ", "ほ"],
+      ma: ["ま", "み", "む", "め", "も"],
+      ya: ["や", "ゆ", "よ"],
+      ra: ["ら", "り", "る", "れ", "ろ"],
+      wa: ["わ", "を", "ん"],
+      dakuon: ["が", "ぎ", "ぐ", "げ", "ご", "ざ", "じ", "ず", "ぜ", "ぞ", "だ", "ぢ", "づ", "で", "ど", "ば", "び", "ぶ", "べ", "ぼ", "ぱ", "ぴ", "ぷ", "ぺ", "ぽ"],
+      youon: ["きゃ", "きゅ", "きょ", "しゃ", "しゅ", "しょ", "ちゃ", "ちゅ", "ちょ", "にゃ", "にゅ", "にょ", "ひゃ", "ひゅ", "ひょ", "みゃ", "みゅ", "みょ", "りゃ", "りゅ", "りょ", "ぎゃ", "ぎゅ", "ぎょ", "じゃ", "じゅ", "じょ", "びゃ", "びゅ", "びょ", "ぴゃ", "ぴゅ", "ぴょ"],
+      words: [
+        { kana: "はな", romaji: "hana" },
+        { kana: "みず", romaji: "mizu" },
+        { kana: "いえ", romaji: "ie" },
+        { kana: "ゆき", romaji: "yuki" },
+        { kana: "くも", romaji: "kumo" },
+        { kana: "あめ", romaji: "ame" },
+        { kana: "さけ", romaji: "sake" },
+        { kana: "つき", romaji: "tsuki" },
+        { kana: "こえ", romaji: "koe" },
+        { kana: "そら", romaji: "sora" }
+      ],
       words3: [
         { kana: "あさひ", romaji: "asahi" },
         { kana: "おみせ", romaji: "omise" },
@@ -109,138 +75,6 @@
         { kana: "きもの", romaji: "kimono" },
         { kana: "さかな", romaji: "sakana" },
         { kana: "ほんや", romaji: "honya" }
-      ],
-      words: [
-        { kana: "はな", romaji: "hana" },
-        { kana: "みず", romaji: "mizu" },
-        { kana: "いえ", romaji: "ie" },
-        { kana: "ゆき", romaji: "yuki" },
-        { kana: "くも", romaji: "kumo" },
-        { kana: "あめ", romaji: "ame" },
-        { kana: "さけ", romaji: "sake" },
-        { kana: "つき", romaji: "tsuki" },
-        { kana: "こえ", romaji: "koe" },
-        { kana: "そら", romaji: "sora" },
-        { kana: "かぜ", romaji: "kaze" },
-        { kana: "たま", romaji: "tama" },
-        { kana: "うた", romaji: "uta" },
-        { kana: "やま", romaji: "yama" },
-        { kana: "かわ", romaji: "kawa" },
-        { kana: "おに", romaji: "oni" },
-        { kana: "ひと", romaji: "hito" },
-        { kana: "ねこ", romaji: "neko" },
-        { kana: "いぬ", romaji: "inu" },
-        { kana: "くち", romaji: "kuchi" },
-        { kana: "てら", romaji: "tera" },
-        { kana: "まど", romaji: "mado" },
-        { kana: "やね", romaji: "yane" },
-        { kana: "かみ", romaji: "kami" },
-        { kana: "ゆめ", romaji: "yume" },
-        { kana: "てがみ", romaji: "tegami" },
-        { kana: "あし", romaji: "ashi" },
-        { kana: "てんき", romaji: "tenki" },
-        { kana: "ゆうひ", romaji: "yuuhi" },
-        { kana: "ほし", romaji: "hoshi" },
-        { kana: "はこ", romaji: "hako" },
-        { kana: "おと", romaji: "oto" },
-        { kana: "ゆび", romaji: "yubi" },
-        { kana: "こども", romaji: "kodomo" },
-        { kana: "かお", romaji: "kao" },
-        { kana: "うみ", romaji: "umi" },
-        { kana: "そと", romaji: "soto" },
-        { kana: "なつ", romaji: "natsu" },
-        { kana: "ふゆ", romaji: "fuyu" },
-        { kana: "いし", romaji: "ishi" },
-        { kana: "きん", romaji: "kin" },
-        { kana: "ぎん", romaji: "gin" },
-        { kana: "て", romaji: "te" },
-        { kana: "め", romaji: "me" },
-        { kana: "みみ", romaji: "mimi" },
-        { kana: "はなび", romaji: "hanabi" },
-        { kana: "おちゃ", romaji: "ocha" },
-        { kana: "たべもの", romaji: "tabemono" }
-      ],
-      a: [
-        { kana: "あ", romaji: "a" },
-        { kana: "い", romaji: "i" },
-        { kana: "う", romaji: "u" },
-        { kana: "え", romaji: "e" },
-        { kana: "お", romaji: "o" }
-      ],
-      ka: [
-        { kana: "か", romaji: "ka" },
-        { kana: "き", romaji: "ki" },
-        { kana: "く", romaji: "ku" },
-        { kana: "け", romaji: "ke" },
-        { kana: "こ", romaji: "ko" }
-      ],
-      sa: [
-        { kana: "さ", romaji: "sa" },
-        { kana: "し", romaji: "shi" },
-        { kana: "す", romaji: "su" },
-        { kana: "せ", romaji: "se" },
-        { kana: "そ", romaji: "so" }
-      ],
-      ta: [
-        { kana: "た", romaji: "ta" },
-        { kana: "ち", romaji: "chi" },
-        { kana: "つ", romaji: "tsu" },
-        { kana: "て", romaji: "te" },
-        { kana: "と", romaji: "to" }
-      ],
-      na: [
-        { kana: "な", romaji: "na" },
-        { kana: "に", romaji: "ni" },
-        { kana: "ぬ", romaji: "nu" },
-        { kana: "ね", romaji: "ne" },
-        { kana: "の", romaji: "no" }
-      ],
-      ha: [
-        { kana: "は", romaji: "ha" },
-        { kana: "ひ", romaji: "hi" },
-        { kana: "ふ", romaji: "fu" },
-        { kana: "へ", romaji: "he" },
-        { kana: "ほ", romaji: "ho" }
-      ],
-      ma: [
-        { kana: "ま", romaji: "ma" },
-        { kana: "み", romaji: "mi" },
-        { kana: "む", romaji: "mu" },
-        { kana: "め", romaji: "me" },
-        { kana: "も", romaji: "mo" }
-      ],
-      ya: [
-        { kana: "や", romaji: "ya" },
-        { kana: "ゆ", romaji: "yu" },
-        { kana: "よ", romaji: "yo" }
-      ],
-      ra: [
-        { kana: "ら", romaji: "ra" },
-        { kana: "り", romaji: "ri" },
-        { kana: "る", romaji: "ru" },
-        { kana: "れ", romaji: "re" },
-        { kana: "ろ", romaji: "ro" }
-      ],
-      wa: [
-        { kana: "わ", romaji: "wa" },
-        { kana: "を", romaji: "wo" },
-        { kana: "ん", romaji: "n" }
-      ],
-      dakuon: [
-        { kana: "が", romaji: "ga" }, { kana: "ぎ", romaji: "gi" }, { kana: "ぐ", romaji: "gu" }, { kana: "げ", romaji: "ge" }, { kana: "ご", romaji: "go" },
-        { kana: "ざ", romaji: "za" }, { kana: "じ", romaji: "ji" }, { kana: "ず", romaji: "zu" }, { kana: "ぜ", romaji: "ze" }, { kana: "ぞ", romaji: "zo" },
-        { kana: "だ", romaji: "da" }, { kana: "ぢ", romaji: "ji" }, { kana: "づ", romaji: "zu" }, { kana: "で", romaji: "de" }, { kana: "ど", romaji: "do" },
-        { kana: "ば", romaji: "ba" }, { kana: "び", romaji: "bi" }, { kana: "ぶ", romaji: "bu" }, { kana: "べ", romaji: "be" }, { kana: "ぼ", romaji: "bo" },
-        { kana: "ぱ", romaji: "pa" }, { kana: "ぴ", romaji: "pi" }, { kana: "ぷ", romaji: "pu" }, { kana: "ぺ", romaji: "pe" }, { kana: "ぽ", romaji: "po" }
-      ],
-      youon: [
-        { kana: "きゃ", romaji: "kya" }, { kana: "きゅ", romaji: "kyu" }, { kana: "きょ", romaji: "kyo" },
-        { kana: "しゃ", romaji: "sha" }, { kana: "しゅ", romaji: "shu" }, { kana: "しょ", romaji: "sho" },
-        { kana: "ちゃ", romaji: "cha" }, { kana: "ちゅ", romaji: "chu" }, { kana: "ちょ", romaji: "cho" },
-        { kana: "にゃ", romaji: "nya" }, { kana: "にゅ", romaji: "nyu" }, { kana: "にょ", romaji: "nyo" },
-        { kana: "ひゃ", romaji: "hya" }, { kana: "ひゅ", romaji: "hyu" }, { kana: "ひょ", romaji: "hyo" },
-        { kana: "みゃ", romaji: "mya" }, { kana: "みゅ", romaji: "myu" }, { kana: "みょ", romaji: "myo" },
-        { kana: "りゃ", romaji: "rya" }, { kana: "りゅ", romaji: "ryu" }, { kana: "りょ", romaji: "ryo" }
       ]
     };
 
@@ -248,38 +82,89 @@
     let currentQuestion = {};
 
     function getSelectedGroups() {
-  const checkboxes = document.querySelectorAll('#filters input[type="checkbox"]');
-  const selected = [];
-  checkboxes.forEach(cb => {
-    if (cb.checked && cb.value) selected.push(cb.value);
-  });
-  return selected;
-}
+      return Array.from(document.querySelectorAll("input[name='group']:checked")).map(el => el.value);
+    }
 
     function updateQuizData() {
-  quizData = [];
-  const groups = getSelectedGroups();
-
-  groups.forEach(group => {
-    if (fullQuizData[group]) {
-      quizData = quizData.concat(fullQuizData[group]);
+      quizData = [];
+      const groups = getSelectedGroups();
+      groups.forEach(group => {
+        if (fullQuizData[group]) {
+          quizData = quizData.concat(fullQuizData[group]);
+        }
+      });
     }
-  });
-}
-  if (groups.includes("words3") && groups.length === 1) {
-    quizData = fullQuizData["words3"];
-    return;
-  }
 
-  groups.forEach(group => {
-    if (group !== "words" && group !== "words3" && fullQuizData[group]) {
-      quizData = quizData.concat(fullQuizData[group]);
+    function setQuestion() {
+      updateQuizData();
+      if (quizData.length === 0) {
+        const q = document.getElementById("question");
+        q.textContent = "出題範囲を選んでください";
+        q.style.fontSize = "20px";
+        document.getElementById("choices").innerHTML = "";
+        return;
+      }
+      currentQuestion = quizData[Math.floor(Math.random() * quizData.length)];
+      const displayKana = currentQuestion.kana;
+      document.getElementById("question").textContent = displayKana;
+      document.getElementById("question").style.fontSize = "";
+
+      let romaji;
+      if (typeof currentQuestion === "string") {
+        romaji = toRomaji(currentQuestion);
+      } else {
+        romaji = currentQuestion.romaji;
+      }
+
+      const choices = shuffle([romaji, ...generateWrongChoices(romaji)]).slice(0, 4);
+      document.getElementById("choices").innerHTML = choices.map(choice => `<button class="choice" onclick="checkAnswer('${choice}')">${choice}</button>`).join("");
     }
-  });
-}
-  
 
-function shuffle(array) {
+    function checkAnswer(selected) {
+      const correct = typeof currentQuestion === "string" ? toRomaji(currentQuestion) : currentQuestion.romaji;
+      if (selected === correct) {
+        alert("Đúng!");
+      } else {
+        alert("Sai...");
+      }
+      setQuestion();
+    }
+
+    function generateWrongChoices(correct) {
+      const allRomaji = [
+        "a", "i", "u", "e", "o", "ka", "ki", "ku", "ke", "ko",
+        "sa", "shi", "su", "se", "so", "ta", "chi", "tsu", "te", "to",
+        "na", "ni", "nu", "ne", "no", "ha", "hi", "fu", "he", "ho",
+        "ma", "mi", "mu", "me", "mo", "ya", "yu", "yo", "ra", "ri",
+        "ru", "re", "ro", "wa", "wo", "n"
+      ];
+      const wrong = [];
+      while (wrong.length < 3) {
+        const choice = allRomaji[Math.floor(Math.random() * allRomaji.length)];
+        if (choice !== correct && !wrong.includes(choice)) {
+          wrong.push(choice);
+        }
+      }
+      return wrong;
+    }
+
+    function toRomaji(hiragana) {
+      const map = {
+        あ: "a", い: "i", う: "u", え: "e", お: "o",
+        か: "ka", き: "ki", く: "ku", け: "ke", こ: "ko",
+        さ: "sa", し: "shi", す: "su", せ: "se", そ: "so",
+        た: "ta", ち: "chi", つ: "tsu", て: "te", と: "to",
+        な: "na", に: "ni", ぬ: "nu", ね: "ne", の: "no",
+        は: "ha", ひ: "hi", ふ: "fu", へ: "he", ほ: "ho",
+        ま: "ma", み: "mi", む: "mu", め: "me", も: "mo",
+        や: "ya", ゆ: "yu", よ: "yo",
+        ら: "ra", り: "ri", る: "ru", れ: "re", ろ: "ro",
+        わ: "wa", を: "wo", ん: "n"
+      };
+      return hiragana.split("").map(char => map[char] || "").join("");
+    }
+
+    function shuffle(array) {
       for (let i = array.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
         [array[i], array[j]] = [array[j], array[i]];
@@ -287,59 +172,26 @@ function shuffle(array) {
       return array;
     }
 
-    function setQuestion() {
-      const speechEnabled = false;
-      updateQuizData();
-      document.getElementById("result").textContent = "";
-      if (quizData.length === 0) {
-  const q = document.getElementById("question");
-  q.textContent = "出題範囲を選んでください";
-  q.style.fontSize = "20px";
-        document.getElementById("choices").innerHTML = "";
-        return;
+    window.onload = () => {
+      const filters = document.getElementById("filters");
+      for (const group in fullQuizData) {
+        const label = document.createElement("label");
+        label.innerHTML = `<input type="checkbox" name="group" value="${group}"> ${group}`;
+        filters.appendChild(label);
       }
-      const index = Math.floor(Math.random() * quizData.length);
-      currentQuestion = quizData[index];
-      document.getElementById("question").textContent = currentQuestion.kana;
-document.getElementById("question").style.fontSize = "";
-      
+    };
 
-      const choices = [currentQuestion.romaji];
-      while (choices.length < 4) {
-        const r = quizData[Math.floor(Math.random() * quizData.length)].romaji;
-        if (!choices.includes(r)) choices.push(r);
-      }
-      shuffle(choices);
-
-      const choicesDiv = document.getElementById("choices");
-      choicesDiv.innerHTML = "";
-      choices.forEach(choice => {
-        const btn = document.createElement("button");
-        btn.textContent = choice;
-        btn.className = "choice";
-        btn.onclick = () => checkAnswer(choice, btn);
-        choicesDiv.appendChild(btn);
-      });
-    }
-
-    function checkAnswer(selected, btn) {
-      const result = document.getElementById("result");
-      if (selected === currentQuestion.romaji) {
-        result.textContent = "Đúng!";
-        
-        btn.classList.add("correct");
+    function checkPassword() {
+      const password = document.getElementById("passwordInput").value;
+      const correctPassword = "hiragana2025";
+      if (password === correctPassword) {
+        document.getElementById("login").style.display = "none";
+        document.getElementById("quizApp").style.display = "block";
+        setQuestion();
       } else {
-        result.textContent = "Sai...";
-        btn.classList.add("incorrect");
+        document.getElementById("loginMessage").textContent = "パスワードが違います。";
       }
-      setTimeout(setQuestion, 1000);
     }
-
-    document.querySelectorAll('#filters input[type="checkbox"]').forEach(cb => {
-      cb.addEventListener('change', setQuestion);
-    });
-
-    setQuestion();
-</script>
+  </script>
 </body>
 </html>
