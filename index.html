@@ -101,11 +101,19 @@
     function updateQuizData() {
   quizData = [];
   const groups = getSelectedGroups();
+  if (groups.length === 0) return;
+
   groups.forEach(group => {
-    if (fullQuizData[group]) {
-      if (group === "words" || group === "words3") {
-        quizData = quizData.concat(fullQuizData[group]);
-      } else {
+    const data = fullQuizData[group];
+    if (!data) return;
+
+    if (group === "words" || group === "words3") {
+      quizData = quizData.concat(data);
+    } else {
+      quizData = quizData.concat(data.map(kana => ({ kana: kana, romaji: toRomaji(kana) })));
+    }
+  });
+} else {
         quizData = quizData.concat(fullQuizData[group].map(kana => ({ kana: kana, romaji: toRomaji(kana) })));
       }
     }
