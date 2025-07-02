@@ -46,7 +46,9 @@
   <div id="question"></div>
   <div class="choices"></div>
 
-  <script>
+  
+<script>
+    // JavaScript コードここから
     const fullQuizData = {
       a: ["あ", "い", "う", "え", "お"],
       k: ["か", "き", "く", "け", "こ"],
@@ -88,33 +90,12 @@
       ]
     };
 
-    const romajiMap = {
-      あ: "a", い: "i", う: "u", え: "e", お: "o",
-      か: "ka", き: "ki", く: "ku", け: "ke", こ: "ko",
-      さ: "sa", し: "shi", す: "su", せ: "se", そ: "so",
-      た: "ta", ち: "chi", つ: "tsu", て: "te", と: "to",
-      な: "na", に: "ni", ぬ: "nu", ね: "ne", の: "no",
-      は: "ha", ひ: "hi", ふ: "fu", へ: "he", ほ: "ho",
-      ま: "ma", み: "mi", む: "mu", め: "me", も: "mo",
-      や: "ya", ゆ: "yu", よ: "yo",
-      ら: "ra", り: "ri", る: "ru", れ: "re", ろ: "ro",
-      わ: "wa", を: "wo", ん: "n",
-      が: "ga", ぎ: "gi", ぐ: "gu", げ: "ge", ご: "go",
-      ざ: "za", じ: "ji", ず: "zu", ぜ: "ze", ぞ: "zo",
-      だ: "da", ぢ: "ji", づ: "zu", で: "de", ど: "do",
-      ば: "ba", び: "bi", ぶ: "bu", べ: "be", ぼ: "bo",
-      ぱ: "pa", ぴ: "pi", ぷ: "pu", ぺ: "pe", ぽ: "po",
-      きゃ: "kya", きゅ: "kyu", きょ: "kyo",
-      しゃ: "sha", しゅ: "shu", しょ: "sho",
-      ちゃ: "cha", ちゅ: "chu", ちょ: "cho"
-    };
+    const romajiMap = { あ: "a", い: "i", う: "u", え: "e", お: "o", か: "ka", き: "ki", く: "ku", け: "ke", こ: "ko", さ: "sa", し: "shi", す: "su", せ: "se", そ: "so", た: "ta", ち: "chi", つ: "tsu", て: "te", と: "to", な: "na", に: "ni", ぬ: "nu", ね: "ne", の: "no", は: "ha", ひ: "hi", ふ: "fu", へ: "he", ほ: "ho", ま: "ma", み: "mi", む: "mu", め: "me", も: "mo", や: "ya", ゆ: "yu", よ: "yo", ら: "ra", り: "ri", る: "ru", れ: "re", ろ: "ro", わ: "wa", を: "wo", ん: "n", が: "ga", ぎ: "gi", ぐ: "gu", げ: "ge", ご: "go", ざ: "za", じ: "ji", ず: "zu", ぜ: "ze", ぞ: "zo", だ: "da", ぢ: "ji", づ: "zu", で: "de", ど: "do", ば: "ba", び: "bi", ぶ: "bu", べ: "be", ぼ: "bo", ぱ: "pa", ぴ: "pi", ぷ: "pu", ぺ: "pe", ぽ: "po", きゃ: "kya", きゅ: "kyu", きょ: "kyo", しゃ: "sha", しゅ: "shu", しょ: "sho", ちゃ: "cha", ちゅ: "chu", ちょ: "cho" };
 
     let quizData = [];
     let currentQuestion;
 
-    function toRomaji(kana) {
-      return romajiMap[kana] || "";
-    }
+    function toRomaji(kana) { return romajiMap[kana] || ""; }
 
     function getSelectedGroups() {
       return Array.from(document.querySelectorAll("input[name='group']:checked")).map(cb => cb.value);
@@ -128,7 +109,6 @@
       groups.forEach(group => {
         const data = fullQuizData[group];
         if (!data) return;
-
         if (group === "words" || group === "words3") {
           quizData = quizData.concat(data);
         } else {
@@ -146,13 +126,11 @@
       }
       currentQuestion = quizData[Math.floor(Math.random() * quizData.length)];
       document.getElementById("question").textContent = currentQuestion.kana;
-
       const choices = [currentQuestion.romaji];
       while (choices.length < 4) {
         const random = quizData[Math.floor(Math.random() * quizData.length)].romaji;
         if (!choices.includes(random)) choices.push(random);
       }
-
       choices.sort(() => Math.random() - 0.5);
       document.querySelector(".choices").innerHTML = choices.map(choice => `<button onclick="checkAnswer('${choice}')">${choice}</button>`).join("");
     }
@@ -163,7 +141,6 @@
       resultDisplay.textContent = answer === correct ? "Đúng!" : "Sai...";
       document.body.appendChild(resultDisplay);
 
-      // 読み上げ
       const utterance = new SpeechSynthesisUtterance(currentQuestion.kana);
       utterance.lang = "ja-JP";
       speechSynthesis.speak(utterance);
