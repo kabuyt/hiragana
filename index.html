@@ -229,7 +229,7 @@ function shuffle(array) {
     dakuon: "だくおん", youon: "ようおん", words: "2文字単語", words3: "3文字単語"
   };
   for (const group in fullQuizData) {
-    const isChecked = group === "a" ? "checked" : "";
+    const isChecked = "";
     const labelName = groupLabels[group] || group;
     const label = document.createElement("label");
     label.innerHTML = `<input type="checkbox" name="group" value="${group}" ${isChecked}> ${labelName}`;
