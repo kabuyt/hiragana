@@ -232,12 +232,26 @@ function shuffle(array) {
     const isChecked = "";
     const labelName = groupLabels[group] || group;
     const label = document.createElement("label");
-    label.innerHTML = `<input type="checkbox" name="group" value="${group}" ${isChecked}> ${labelName}`;
+    label.innerHTML = `<input type="checkbox" name="group" value="${group}" ${isChecked} onchange="handleCheckboxChange(this)"> ${labelName}`;
     filters.appendChild(label);
   }
   document.getElementById("quizApp").style.display = "block";
   setQuestion();
 };
-  </script>
+  function handleCheckboxChange(checkbox) {
+  const isWordGroup = checkbox.value === "words" || checkbox.value === "words3";
+  if (isWordGroup && checkbox.checked) {
+    document.querySelectorAll("input[name='group']").forEach(cb => {
+      if (cb.value !== checkbox.value) cb.checked = false;
+    });
+  } else if (!isWordGroup && checkbox.checked) {
+    document.querySelectorAll("input[name='group']").forEach(cb => {
+      if (cb.value === "words" || cb.value === "words3") cb.checked = false;
+    });
+  }
+  setQuestion();
+}
+
+</script>
 </body>
 </html>
