@@ -15,7 +15,7 @@
       text-align: center;
     }
     #question {
-      font-size: 48px;
+      font-size: 72px;
       text-align: center;
       margin: 20px 0;
     }
@@ -169,7 +169,7 @@
       const filterDiv = document.getElementById("filters");
       Object.keys(fullQuizData).forEach(group => {
         const label = document.createElement("label");
-        label.innerHTML = `<input type="checkbox" name="group" value="${group}" onchange="handleCheckboxChange(this)"> ${group}`;
+        label.innerHTML = `<input type="checkbox" name="group" value="\${group}" onchange="handleCheckboxChange(this)"> \${fullQuizData[group][0] || group}`;
         filterDiv.appendChild(label);
       });
     };
