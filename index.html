@@ -1,264 +1,201 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>ひらがなクイズ</title>
   <style>
     body {
       font-family: sans-serif;
-      text-align: center;
       padding: 20px;
+      max-width: 500px;
+      margin: auto;
+    }
+    h1 {
+      text-align: center;
     }
     #question {
-      font-size: 96px;
-      margin: 30px 0;
+      font-size: 48px;
+      text-align: center;
+      margin: 20px 0;
     }
-    .choice {
-  font-size: 32px;
-  padding: 10px 20px;
-  margin: 10px auto;
-  display: block;
-  width: 100%;
-  max-width: 300px;
-  box-sizing: border-box;
-}
-    #filters {
+    .choices {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-around;
       margin-bottom: 20px;
     }
-  #choices {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-.choice {
-  font-size: 32px;
-  padding: 10px 20px;
-  width: 90%;
-  max-width: 300px;
-  box-sizing: border-box;
-  margin: 10px auto;
-}
-</style>
+    .choices button {
+      font-size: 24px;
+      padding: 10px 20px;
+      margin: 5px;
+    }
+    #filters {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      justify-content: center;
+      margin-bottom: 10px;
+    }
+  </style>
 </head>
 <body>
-  
-
-  <div id="quizApp" style="display: none;">
-    <div id="filters"></div>
-<p style="font-size: 14px; margin-bottom: 20px;">Vui lòng chọn phạm vi câu hỏi</p>
-    <div id="question"></div>
-    <div id="choices"></div>
-  </div>
+  <h1>ひらがなクイズ</h1>
+  <div id="filters"></div>
+  <p style="font-size: 14px; margin-bottom: 20px;">Vui lòng chọn phạm vi câu hỏi</p>
+  <div id="question"></div>
+  <div class="choices"></div>
 
   <script>
     const fullQuizData = {
       a: ["あ", "い", "う", "え", "お"],
-      ka: ["か", "き", "く", "け", "こ"],
-      sa: ["さ", "し", "す", "せ", "そ"],
-      ta: ["た", "ち", "つ", "て", "と"],
-      na: ["な", "に", "ぬ", "ね", "の"],
-      ha: ["は", "ひ", "ふ", "へ", "ほ"],
-      ma: ["ま", "み", "む", "め", "も"],
-      ya: ["や", "ゆ", "よ"],
-      ra: ["ら", "り", "る", "れ", "ろ"],
-      wa: ["わ", "を", "ん"],
-      dakuon: ["が", "ぎ", "ぐ", "げ", "ご", "ざ", "じ", "ず", "ぜ", "ぞ", "だ", "ぢ", "づ", "で", "ど", "ば", "び", "ぶ", "べ", "ぼ", "ぱ", "ぴ", "ぷ", "ぺ", "ぽ"],
-      youon: ["きゃ", "きゅ", "きょ", "しゃ", "しゅ", "しょ", "ちゃ", "ちゅ", "ちょ", "にゃ", "にゅ", "にょ", "ひゃ", "ひゅ", "ひょ", "みゃ", "みゅ", "みょ", "りゃ", "りゅ", "りょ", "ぎゃ", "ぎゅ", "ぎょ", "じゃ", "じゅ", "じょ", "びゃ", "びゅ", "びょ", "ぴゃ", "ぴゅ", "ぴょ"],
+      k: ["か", "き", "く", "け", "こ"],
+      s: ["さ", "し", "す", "せ", "そ"],
+      t: ["た", "ち", "つ", "て", "と"],
+      n: ["な", "に", "ぬ", "ね", "の"],
+      h: ["は", "ひ", "ふ", "へ", "ほ"],
+      m: ["ま", "み", "む", "め", "も"],
+      y: ["や", "ゆ", "よ"],
+      r: ["ら", "り", "る", "れ", "ろ"],
+      w: ["わ", "を", "ん"],
+      g: ["が", "ぎ", "ぐ", "げ", "ご"],
+      z: ["ざ", "じ", "ず", "ぜ", "ぞ"],
+      d: ["だ", "ぢ", "づ", "で", "ど"],
+      b: ["ば", "び", "ぶ", "べ", "ぼ"],
+      p: ["ぱ", "ぴ", "ぷ", "ぺ", "ぽ"],
+      combo: ["きゃ", "きゅ", "きょ", "しゃ", "しゅ", "しょ", "ちゃ", "ちゅ", "ちょ"],
       words: [
         { kana: "はな", romaji: "hana" },
         { kana: "みず", romaji: "mizu" },
-        { kana: "いえ", romaji: "ie" },
-        { kana: "ゆき", romaji: "yuki" },
+        { kana: "そら", romaji: "sora" },
+        { kana: "やま", romaji: "yama" },
+        { kana: "かわ", romaji: "kawa" },
         { kana: "くも", romaji: "kumo" },
-        { kana: "あめ", romaji: "ame" },
-        { kana: "さけ", romaji: "sake" },
+        { kana: "ひと", romaji: "hito" },
+        { kana: "いぬ", romaji: "inu" },
+        { kana: "ねこ", romaji: "neko" },
+        { kana: "まど", romaji: "mado" },
         { kana: "つき", romaji: "tsuki" },
-        { kana: "こえ", romaji: "koe" },
-        { kana: "そら", romaji: "sora" }
-      ],
-      words3: [
-        { kana: "あさひ", romaji: "asahi" },
-        { kana: "おみせ", romaji: "omise" },
-        { kana: "くすり", romaji: "kusuri" },
-        { kana: "たまご", romaji: "tamago" },
-        { kana: "うんてん", romaji: "unten" },
-        { kana: "まくら", romaji: "makura" },
-        { kana: "やきにく", romaji: "yakiniku" },
-        { kana: "きもの", romaji: "kimono" },
-        { kana: "さかな", romaji: "sakana" },
-        { kana: "ほんや", romaji: "honya" }
+        { kana: "ほし", romaji: "hoshi" },
+        { kana: "あめ", romaji: "ame" },
+        { kana: "ゆき", romaji: "yuki" },
+        { kana: "かぜ", romaji: "kaze" },
+        { kana: "たいよう", romaji: "taiyou" },
+        { kana: "うみ", romaji: "umi" },
+        { kana: "しま", romaji: "shima" },
+        { kana: "き", romaji: "ki" },
+        { kana: "は", romaji: "ha" }
       ]
     };
 
+    const romajiMap = {
+      あ: "a", い: "i", う: "u", え: "e", お: "o",
+      か: "ka", き: "ki", く: "ku", け: "ke", こ: "ko",
+      さ: "sa", し: "shi", す: "su", せ: "se", そ: "so",
+      た: "ta", ち: "chi", つ: "tsu", て: "te", と: "to",
+      な: "na", に: "ni", ぬ: "nu", ね: "ne", の: "no",
+      は: "ha", ひ: "hi", ふ: "fu", へ: "he", ほ: "ho",
+      ま: "ma", み: "mi", む: "mu", め: "me", も: "mo",
+      や: "ya", ゆ: "yu", よ: "yo",
+      ら: "ra", り: "ri", る: "ru", れ: "re", ろ: "ro",
+      わ: "wa", を: "wo", ん: "n",
+      が: "ga", ぎ: "gi", ぐ: "gu", げ: "ge", ご: "go",
+      ざ: "za", じ: "ji", ず: "zu", ぜ: "ze", ぞ: "zo",
+      だ: "da", ぢ: "ji", づ: "zu", で: "de", ど: "do",
+      ば: "ba", び: "bi", ぶ: "bu", べ: "be", ぼ: "bo",
+      ぱ: "pa", ぴ: "pi", ぷ: "pu", ぺ: "pe", ぽ: "po",
+      きゃ: "kya", きゅ: "kyu", きょ: "kyo",
+      しゃ: "sha", しゅ: "shu", しょ: "sho",
+      ちゃ: "cha", ちゅ: "chu", ちょ: "cho"
+    };
+
     let quizData = [];
-    let currentQuestion = {};
+    let currentQuestion;
+
+    function toRomaji(kana) {
+      return romajiMap[kana] || "";
+    }
 
     function getSelectedGroups() {
-      return Array.from(document.querySelectorAll("input[name='group']:checked")).map(el => el.value);
+      return Array.from(document.querySelectorAll("input[name='group']:checked")).map(cb => cb.value);
     }
 
     function updateQuizData() {
-  quizData = [];
-  const groups = getSelectedGroups();
-  if (groups.length === 0) return;
+      quizData = [];
+      const groups = getSelectedGroups();
+      if (groups.length === 0) return;
 
-  groups.forEach(group => {
-    const data = fullQuizData[group];
-    if (!data) return;
+      groups.forEach(group => {
+        const data = fullQuizData[group];
+        if (!data) return;
 
-    if (group === "words" || group === "words3") {
-      quizData = quizData.concat(data);
-    } else {
-      quizData = quizData.concat(data.map(kana => ({ kana, romaji: toRomaji(kana) })));
+        if (group === "words" || group === "words3") {
+          quizData = quizData.concat(data);
+        } else {
+          quizData = quizData.concat(data.map(kana => ({ kana, romaji: toRomaji(kana) })));
+        }
+      });
     }
-  });
-});
-}
 
-
-function setQuestion() {
+    function setQuestion() {
       updateQuizData();
       if (quizData.length === 0) {
-        const q = document.getElementById("question");
-        q.textContent = "出題範囲を選んでください";
-        q.style.fontSize = "20px";
-        document.getElementById("choices").innerHTML = "";
+        document.getElementById("question").textContent = "出題範囲を選んでください";
+        document.querySelector(".choices").innerHTML = "";
         return;
       }
       currentQuestion = quizData[Math.floor(Math.random() * quizData.length)];
-      const displayKana = currentQuestion.kana;
-      document.getElementById("question").textContent = displayKana;
+      document.getElementById("question").textContent = currentQuestion.kana;
 
-      // 読み上げ機能は checkAnswer に移動しました
-      document.getElementById("question").style.fontSize = "";
-
-      let romaji = currentQuestion.romaji;
-
-      const choices = shuffle([romaji, ...generateWrongChoices(romaji)]).slice(0, 4);
-      document.getElementById("choices").innerHTML = choices.map(choice => `<button class="choice" onclick="checkAnswer('${choice}')">${choice}</button>`).join("");
-    }
-
-    function checkAnswer(selected) {
-  const correct = currentQuestion.romaji;
-  const resultText = selected === correct ? "Đúng!" : "Sai...";
-
-  const resultDisplay = document.createElement("div");
-  resultDisplay.textContent = resultText;
-  resultDisplay.style.fontSize = "24px";
-  resultDisplay.style.marginTop = "10px";
-  document.getElementById("choices").appendChild(resultDisplay);
-
-  const utterance = new SpeechSynthesisUtterance(currentQuestion.kana);
-  utterance.lang = "ja-JP";
-  speechSynthesis.speak(utterance);
-
-  setTimeout(() => {
-    resultDisplay.remove();
-    setQuestion();
-  }, 1000);
-    }
-
-    function generateWrongChoices(correct) {
-      const allRomaji = [
-        "a", "i", "u", "e", "o", "ka", "ki", "ku", "ke", "ko",
-        "sa", "shi", "su", "se", "so", "ta", "chi", "tsu", "te", "to",
-        "na", "ni", "nu", "ne", "no", "ha", "hi", "fu", "he", "ho",
-        "ma", "mi", "mu", "me", "mo", "ya", "yu", "yo", "ra", "ri",
-        "ru", "re", "ro", "wa", "wo", "n"
-      ];
-      const wrong = [];
-      while (wrong.length < 3) {
-        const choice = allRomaji[Math.floor(Math.random() * allRomaji.length)];
-        if (choice !== correct && !wrong.includes(choice)) {
-          wrong.push(choice);
-        }
+      const choices = [currentQuestion.romaji];
+      while (choices.length < 4) {
+        const random = quizData[Math.floor(Math.random() * quizData.length)].romaji;
+        if (!choices.includes(random)) choices.push(random);
       }
-      return wrong;
+
+      choices.sort(() => Math.random() - 0.5);
+      document.querySelector(".choices").innerHTML = choices.map(choice => `<button onclick="checkAnswer('${choice}')">${choice}</button>`).join("");
     }
 
-    function toRomaji(hiragana) {
-  const map = {
-    きゃ: "kya", きゅ: "kyu", きょ: "kyo",
-    しゃ: "sha", しゅ: "shu", しょ: "sho",
-    ちゃ: "cha", ちゅ: "chu", ちょ: "cho",
-    にゃ: "nya", にゅ: "nyu", にょ: "nyo",
-    ひゃ: "hya", ひゅ: "hyu", ひょ: "hyo",
-    みゃ: "mya", みゅ: "myu", みょ: "myo",
-    りゃ: "rya", りゅ: "ryu", りょ: "ryo",
-    ぎゃ: "gya", ぎゅ: "gyu", ぎょ: "gyo",
-    じゃ: "ja", じゅ: "ju", じょ: "jo",
-    びゃ: "bya", びゅ: "byu", びょ: "byo",
-    ぴゃ: "pya", ぴゅ: "pyu", ぴょ: "pyo",
-    あ: "a", い: "i", う: "u", え: "e", お: "o",
-    か: "ka", き: "ki", く: "ku", け: "ke", こ: "ko",
-    さ: "sa", し: "shi", す: "su", せ: "se", そ: "so",
-    た: "ta", ち: "chi", つ: "tsu", て: "te", と: "to",
-    な: "na", に: "ni", ぬ: "nu", ね: "ne", の: "no",
-    は: "ha", ひ: "hi", ふ: "fu", へ: "he", ほ: "ho",
-    ま: "ma", み: "mi", む: "mu", め: "me", も: "mo",
-    や: "ya", ゆ: "yu", よ: "yo",
-    ら: "ra", り: "ri", る: "ru", れ: "re", ろ: "ro",
-    わ: "wa", を: "wo", ん: "n",
-    が: "ga", ぎ: "gi", ぐ: "gu", げ: "ge", ご: "go",
-    ざ: "za", じ: "ji", ず: "zu", ぜ: "ze", ぞ: "zo",
-    だ: "da", ぢ: "ji", づ: "zu", で: "de", ど: "do",
-    ば: "ba", び: "bi", ぶ: "bu", べ: "be", ぼ: "bo",
-    ぱ: "pa", ぴ: "pi", ぷ: "pu", ぺ: "pe", ぽ: "po"
-  };
-  let result = "";
-  for (let i = 0; i < hiragana.length; i++) {
-    const two = hiragana.slice(i, i + 2);
-    if (map[two]) {
-      result += map[two];
-      i++;
-    } else {
-      result += map[hiragana[i]] || "";
-    }
-  }
-  return result;
-}
+    function checkAnswer(answer) {
+      const correct = currentQuestion.romaji;
+      const resultDisplay = document.createElement("div");
+      resultDisplay.textContent = answer === correct ? "Đúng!" : "Sai...";
+      document.body.appendChild(resultDisplay);
 
-function shuffle(array) {
-      for (let i = array.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [array[i], array[j]] = [array[j], array[i]];
+      // 読み上げ
+      const utterance = new SpeechSynthesisUtterance(currentQuestion.kana);
+      utterance.lang = "ja-JP";
+      speechSynthesis.speak(utterance);
+
+      setTimeout(() => {
+        resultDisplay.remove();
+        setQuestion();
+      }, 1000);
+    }
+
+    function handleCheckboxChange(checkbox) {
+      const isWordGroup = checkbox.value === "words" || checkbox.value === "words3";
+      if (isWordGroup && checkbox.checked) {
+        document.querySelectorAll("input[name='group']").forEach(cb => {
+          if (cb.value !== checkbox.value) cb.checked = false;
+        });
+      } else if (!isWordGroup && checkbox.checked) {
+        document.querySelectorAll("input[name='group']").forEach(cb => {
+          if (cb.value === "words" || cb.value === "words3") cb.checked = false;
+        });
       }
-      return array;
+      setQuestion();
     }
 
     window.onload = () => {
-  const filters = document.getElementById("filters");
-  const groupLabels = {
-    a: "あ行", ka: "か行", sa: "さ行", ta: "た行", na: "な行",
-    ha: "は行", ma: "ま行", ya: "や行", ra: "ら行", wa: "わ行",
-    dakuon: "だくおん", youon: "ようおん", words: "2文字単語", words3: "3文字単語"
-  };
-  for (const group in fullQuizData) {
-    const isChecked = "";
-    const labelName = groupLabels[group] || group;
-    const label = document.createElement("label");
-    label.innerHTML = `<input type="checkbox" name="group" value="${group}" ${isChecked} onchange="handleCheckboxChange(this)"> ${labelName}`;
-    filters.appendChild(label);
-  }
-  document.getElementById("quizApp").style.display = "block";
-  setQuestion();
-};
-  function handleCheckboxChange(checkbox) {
-  const isWordGroup = checkbox.value === "words" || checkbox.value === "words3";
-  if (isWordGroup && checkbox.checked) {
-    document.querySelectorAll("input[name='group']").forEach(cb => {
-      if (cb.value !== checkbox.value) cb.checked = false;
-    });
-  } else if (!isWordGroup && checkbox.checked) {
-    document.querySelectorAll("input[name='group']").forEach(cb => {
-      if (cb.value === "words" || cb.value === "words3") cb.checked = false;
-    });
-  }
-  setQuestion();
-}
-
-</script>
+      const filterDiv = document.getElementById("filters");
+      Object.keys(fullQuizData).forEach(group => {
+        const label = document.createElement("label");
+        label.innerHTML = `<input type="checkbox" name="group" value="${group}" onchange="handleCheckboxChange(this)"> ${group}`;
+        filterDiv.appendChild(label);
+      });
+    };
+  </script>
 </body>
 </html>
