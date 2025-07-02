@@ -99,12 +99,18 @@
     }
 
     function updateQuizData() {
-      quizData = [];
-      const groups = getSelectedGroups();
-      groups.forEach(group => {
-        if (fullQuizData[group]) {
-          quizData = quizData.concat(fullQuizData[group]);
-        }
+  quizData = [];
+  const groups = getSelectedGroups();
+  groups.forEach(group => {
+    if (fullQuizData[group]) {
+      if (group === "words" || group === "words3") {
+        quizData = quizData.concat(fullQuizData[group]);
+      } else {
+        quizData = quizData.concat(fullQuizData[group].map(kana => ({ kana: kana, romaji: toRomaji(kana) })));
+      }
+    }
+  });
+}
       });
     }
 
