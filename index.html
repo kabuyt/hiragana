@@ -177,7 +177,13 @@
   for (const group in fullQuizData) {
     const isChecked = group === "a" ? "checked" : "";
     const label = document.createElement("label");
-    label.innerHTML = `<input type="checkbox" name="group" value="${group}" ${isChecked}> ${group}`;
+    const groupLabels = {
+  a: "あ行", ka: "か行", sa: "さ行", ta: "た行", na: "な行",
+  ha: "は行", ma: "ま行", ya: "や行", ra: "ら行", wa: "わ行",
+  dakuon: "だくおん", youon: "ようおん", words: "2文字単語", words3: "3文字単語"
+};
+const labelName = groupLabels[group] || group;
+label.innerHTML = `<input type="checkbox" name="group" value="${group}" ${isChecked}> ${labelName}`;
     filters.appendChild(label);
   }
 };
