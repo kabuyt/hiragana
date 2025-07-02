@@ -133,6 +133,11 @@ function setQuestion() {
       currentQuestion = quizData[Math.floor(Math.random() * quizData.length)];
       const displayKana = currentQuestion.kana;
       document.getElementById("question").textContent = displayKana;
+
+      // 読み上げ機能
+      const utterance = new SpeechSynthesisUtterance(displayKana);
+      utterance.lang = "ja-JP";
+      speechSynthesis.speak(utterance);
       document.getElementById("question").style.fontSize = "";
 
       let romaji = currentQuestion.romaji;
