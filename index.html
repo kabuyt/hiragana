@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>ひらがなクイズ</title>
@@ -139,6 +140,9 @@
       const correct = currentQuestion.romaji;
       const resultDisplay = document.createElement("div");
       resultDisplay.textContent = answer === correct ? "Đúng!" : "Sai...";
+      resultDisplay.style.textAlign = "center";
+      resultDisplay.style.fontSize = "24px";
+      resultDisplay.style.marginTop = "10px";
       document.body.appendChild(resultDisplay);
 
       const utterance = new SpeechSynthesisUtterance(currentQuestion.kana);
@@ -171,7 +175,7 @@
     a: "あ行", k: "か行", s: "さ行", t: "た行", n: "な行",
     h: "は行", m: "ま行", y: "や行", r: "ら行", w: "わ行",
     g: "が行", z: "ざ行", d: "だ行", b: "ば行", p: "ぱ行",
-    combo: "拗音", words: "二文字単語"
+    combo: "拗音", words: "二文字単語", words3: "三文字単語"
   };
   Object.keys(fullQuizData).forEach(group => {
     const label = document.createElement("label");
