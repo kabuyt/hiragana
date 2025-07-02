@@ -173,13 +173,14 @@
     }
 
     window.onload = () => {
-      const filters = document.getElementById("filters");
-      for (const group in fullQuizData) {
-        const label = document.createElement("label");
-        label.innerHTML = `<input type="checkbox" name="group" value="${group}"> ${group}`;
-        filters.appendChild(label);
-      }
-    };
+  const filters = document.getElementById("filters");
+  for (const group in fullQuizData) {
+    const isChecked = group === "a" ? "checked" : "";
+    const label = document.createElement("label");
+    label.innerHTML = `<input type="checkbox" name="group" value="${group}" ${isChecked}> ${group}`;
+    filters.appendChild(label);
+  }
+};
 
     function checkPassword() {
       const password = document.getElementById("passwordInput").value;
