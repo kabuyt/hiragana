@@ -42,7 +42,7 @@
 <body>
   <h1>ひらがなクイズ</h1>
   <div id="filters"></div>
-  <p style="font-size: 14px; margin-bottom: 20px;">Vui lòng chọn phạm vi câu hỏi</p>
+  <p style="font-size: 16px; margin-bottom: 20px; text-align: center;">出題範囲を選んでください（Vui lòng chọn phạm vi câu hỏi）</p>
   <div id="question"></div>
   <div class="choices"></div>
 
@@ -166,13 +166,20 @@
     }
 
     window.onload = () => {
-      const filterDiv = document.getElementById("filters");
-      Object.keys(fullQuizData).forEach(group => {
-        const label = document.createElement("label");
-        label.innerHTML = `<input type="checkbox" name="group" value="\${group}" onchange="handleCheckboxChange(this)"> \${fullQuizData[group][0] || group}`;
-        filterDiv.appendChild(label);
-      });
-    };
+  const filterDiv = document.getElementById("filters");
+  const groupLabels = {
+    a: "あ行", k: "か行", s: "さ行", t: "た行", n: "な行",
+    h: "は行", m: "ま行", y: "や行", r: "ら行", w: "わ行",
+    g: "が行", z: "ざ行", d: "だ行", b: "ば行", p: "ぱ行",
+    combo: "拗音", words: "二文字単語"
+  };
+  Object.keys(fullQuizData).forEach(group => {
+    const label = document.createElement("label");
+    const labelText = groupLabels[group] || group;
+    label.innerHTML = `<input type="checkbox" name="group" value="${group}" onchange="handleCheckboxChange(this)"> ${labelText}`;
+    filterDiv.appendChild(label);
+  });
+};
   </script>
 </body>
 </html>
